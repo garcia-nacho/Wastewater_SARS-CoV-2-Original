@@ -43,6 +43,7 @@ The filename of the *.fastq.gz* files are irrelevant and the samples are named u
 
 ## Output   
 The pipeline generates four folders: analysis, bam, QC, sequences   
+   
 **analysis**    
 Here you will find:   
 -Sankey plots showing the most abundant combinations of mutations at nucleotide and amino acid levels   
@@ -64,4 +65,4 @@ Here you will find:
 Here you find the fasta sequences of the consensus and variants found in each sample    
      
 ## Under the hood
-The pipeline filters the reads according using a quality cut-off using *[seqkit](https://bioinf.shenwei.me/seqkit/)*. Reads are mapped against the reference using *minimap2* and a filtered and sorted using *samtools*. The resulting bam file is indexed using *samtools*. The positions showing a mix of bases are identified using *noisefinder* and the bases alonside the read-id are retreived using *bbasereader*. All positions are merged using the read-id as pivot column and the differente variants are indenfied and saved in a fasta file. The fasta files are analyzed with nextclade to find the mutations at the nucleotide level and the plots and analysis are generated in *R* 
+The pipeline filters the reads according using a quality cut-off using *[seqkit](https://bioinf.shenwei.me/seqkit/)*. Reads are mapped against the reference using *[minimap2](https://github.com/lh3/minimap2)* and a filtered and sorted using *[samtools](http://www.htslib.org/)*. The resulting bam file is indexed using *[samtools](http://www.htslib.org/)* again. The positions showing a mix of bases are identified using *[noisefinder](https://github.com/garcia-nacho/NoisExtractor)* and the bases alonside the read-id are retreived using *[bbasereader](https://github.com/garcia-nacho/bbasereader)*. All positions are merged using the read-id as pivot column and the differente variants are indenfied and saved in a fasta file. The fasta files are analyzed with nextclade to find the mutations at the nucleotide level and the plots and analysis are generated in *[R](https://www.r-project.org/)* 
