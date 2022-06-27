@@ -11,7 +11,7 @@ echo -e "    ________  _______                                                  
 
 echo "Quality:"${1}"/Noise Cutoff:"${2}
 echo "Analyzing Spike gene from "${3}" to "${4}
-echo "Quality, noise, and region to analyze can be set using these flags:\n-e qual=Q, -e noise=N, -e start=S, -e end=E"
+echo -e "Quality, noise, and region to analyze can be set using these flags: \n -e qual=Q, -e noise=N, -e start=S, -e end=E"
 sleep 3s
 
 RefBowtie2=/home/docker/CommonFiles/reference/SpikeSars-CoV-2
