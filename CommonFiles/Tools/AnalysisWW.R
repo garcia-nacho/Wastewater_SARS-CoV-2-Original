@@ -42,7 +42,8 @@ ggsave(paste(path, "Coverage.pdf",sep = ""))
 
 poi<-noise.table$V1[which(noise.table$V2>co.n & noise.table$V1>n.start & noise.table$V1<n.end & noise.table$V3>20)]
 
-if(length(poi)==0) poi<-noise.table$V1[order(noise.table$V2, decreasing=TRUE)][1:5]
+if(length(poi)>0){
+  
 if(length(poi)>40)poi<-noise.table$V1[order(noise.table$V2, decreasing=TRUE)][1:40]
 samples.to.analyze<-poi
 
@@ -73,6 +74,10 @@ stopCluster(cluster.cores)
 
 position.files<-list.files(path, full.names = TRUE, pattern = "_P.*\\.tsv")
 
+top.noise<-grep(paste("_P",noise.table$V1[which(noise.table$V2== max(noise.table$V2[which(noise.table$V1 %in% poi)]))],".tsv",sep = ""), position.files)
+
+position.files<-position.files[c(top.noise, c(1:length(position.files))[-top.noise])]
+
 pb<-txtProgressBar(min = 0, max = length(position.files), initial = 1)
 print("Getting the reads for the positions of interest")
 try(rm(out))
@@ -85,24 +90,30 @@ for (i in 1:length(position.files)) {
   colnames(dummy)<-c("ReadID","Position","Base")
   if(length( which(duplicated(dummy)))>0)dummy<-dummy[-which(duplicated(dummy)),]
   #if(length(which(dummy$Base=="I"))>0)dummy<-dummy[-which(dummy$Base=="I"),]
-  which(duplicated(dummy$ReadID))
+  
   colnames(dummy)[3]<-paste("P_",unique(dummy$Position),sep = "")
   dummy<-dummy[,c(1,3)]
   
+  if(length(which(is.na(dummy[,2])))<nrow(dummy)*0.7){
   if(!exists("out")){
     out<-dummy
     
   }else{
     setkey(out, ReadID)
     setkey(dummy, ReadID)
-    setkey(out, ReadID)
     out<-out[dummy, on="ReadID"]
     #out<-merge(out, dummy, by="ReadID",all=TRUE)
   }
+    }
   }
 }
 
+
 close(pb)
+
+#Removing problematic reads
+col.to.remove<-which(apply(out[,-1],2,function(x)length(which(is.na(x))))> nrow(out)*0.7 )
+if(length(col.to.remove)>0) out<-out[,-col.to.remove]
 
 file.remove(position.files)
 out<-as.data.frame(out)
@@ -114,8 +125,6 @@ for (c in 2:ncol(out)) {
 
 if(length(index.c)>0) out<-out[,-index.c]
 out<-out[-unique(which(is.na(out), arr.ind = TRUE)[,1]),]
-
-
 
 print("Finding variants")
 
@@ -199,3 +208,4 @@ for (i in 1:nrow(variant.out)) {
 }
 if(length(which(refspike[[1]]=="-"))>0)refspike[[1]]<-refspike[[1]][-which(refspike[[1]]=="-")]
 write.fasta(refspike, paste(path,"Variants.fa",sep = ""), names = names(refspike))
+}
