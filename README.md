@@ -45,7 +45,7 @@ The script must be run in a folder with the following structure:
 
 The filename of the *.fastq.gz* files are irrelevant and the samples are named using the folder that containes them as name    
 
-Alternatively, you can use the prebuild docker image stored at [dockerhub](https://hub.docker.com/repository/docker/garcianacho/wastewater)
+Alternatively, you can use the prebuilt docker image stored at [dockerhub](https://hub.docker.com/repository/docker/garcianacho/wastewater)
 
 <code>docker pull garcianacho/wastewate && docker run -it --rm -v $(pwd):/Data wastewater</code>
 
