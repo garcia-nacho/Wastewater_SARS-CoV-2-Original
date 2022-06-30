@@ -3,6 +3,10 @@
 
 SARS-CoV-2 wastewater surveillance using long reads (Tested with Nanopore).
 
+## Introduction
+This pipeline identifies the different SARS-CoV-2 lineages taking advantage of long-read sequencing.   
+![Overview](/)
+
 ## Installation   
 <code>git clone https://github.com/garcia-nacho/Wastewater_SARS-CoV-2/ </code>  
 <code> docker build -t wastewater Wastewater_SARS-CoV-2 </code>
