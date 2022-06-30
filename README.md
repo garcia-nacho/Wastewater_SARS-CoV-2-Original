@@ -19,10 +19,10 @@ To filter reads by quality add the flag *-e qual*. E.g:
 <code>docker run -it --rm -e qual=10 -v $(pwd):/Data wastewater </code>   
 (Use *-e qual=-1* to skip the filtering step)   
    
-To change the default noise cut-off (0.15) use the flag *-e noise*. E.g:    
+To change the default noise cut-off (0.15) use the flag *-e noise*. E.g:       
 <code>docker run -it --rm -e noise=0.3 -v $(pwd):/Data wastewater </code>
 
-To change the region to analyze (default 1250-2250 by default) use the flags *-e start* and *-e end*. E.g: 
+To change the region to analyze (default 1250-2250 by default) use the flags *-e start* and *-e end*. E.g:    
 <code>docker run -it --rm -e start=1000 -e end=2000 -v $(pwd):/Data wastewater </code>
 
 The script must be run in a folder with the following structure:
