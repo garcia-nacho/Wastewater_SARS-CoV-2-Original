@@ -48,7 +48,8 @@ The filename of the *.fastq.gz* files are irrelevant and the samples are named u
 Alternatively, you can use the prebuilt docker image stored at [dockerhub](https://hub.docker.com/repository/docker/garcianacho/wastewater)
 
 <code>docker pull garcianacho/wastewate && docker run -it --rm -v $(pwd):/Data wastewater</code>
-
+   
+Note that older versions of docker might require the flag <code>--privileged</code> to run properly.       
 ## Output   
 The pipeline generates four folders: analysis, bam, QC, sequences   
    
