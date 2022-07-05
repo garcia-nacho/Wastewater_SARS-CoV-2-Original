@@ -120,7 +120,8 @@ out<-as.data.frame(out)
 
 index.c<-vector()
 for (c in 2:ncol(out)) {
-  if(length(which(out[,c] %in% c("D","I")))>0) if(max(table(out[-which(out[,c] %in% c("D","I")),c]))> nrow(out)*0.85) index.c<-c(index.c,c)
+  if(length(which(out[,c] %in% c("D","I")))>0){ 
+    if(max(table(out[-which(out[,c] %in% c("D","I")),c]))> nrow(out)*0.85) index.c<-c(index.c,c)}
 }
 
 if(length(index.c)>0) out<-out[,-index.c]
@@ -157,14 +158,16 @@ for (i in 1:nrow(variantable)) {
 
 
 pure.variants<-variant.out[-grep("D", variant.out$variant),]
-
+row.t.r<-vector()
 for (i in 1:nrow(variant.out)) {
   if(!variant.out$variantID[i] %in% pure.variants$variantID){
   signature<- as.character(variant.out[i,grep("P_", colnames(variant.out))])
   dummy.pure.var<-pure.variants[,grep("P_", colnames(pure.variants))[-which(signature=="D")], drop=FALSE]  
   dummy.pure.var$ID<- apply(dummy.pure.var, 1, function(x) paste(x,collapse = "/"))
   var.to.track<- which(dummy.pure.var$ID == paste(signature[-which(signature=="D")],collapse =   "/"))
-  if(length(var.to.track)<0){ variant.out$variantID[i]<-paste(pure.variants$variantID[var.to.track],collapse = "/")
+  #Changed this to ==1 
+  if(length(var.to.track)==1){ 
+  variant.out$variantID[i]<-paste(pure.variants$variantID[var.to.track],collapse = "/")
   pure.variants$count[var.to.track]<- variant.out$count[i]+pure.variants$count[var.to.track]
   pure.variants$ratio[var.to.track]<- variant.out$ratio[i]+pure.variants$ratio[var.to.track]
   }
@@ -172,8 +175,9 @@ for (i in 1:nrow(variant.out)) {
 }
 variant.out<-variant.out[-which(variant.out$variantID %in% pure.variants$variantID),]
 
-if(nrow(variant.out)>0) pure.variants<-rbind(pure.variants, variant.out)  
-
+if(nrow(variant.out)>0){ 
+  pure.variants<-rbind(pure.variants, variant.out)  
+}
 variant.out<-pure.variants
 
 variant.out$variant<-NULL
@@ -199,9 +203,11 @@ for (i in 1:nrow(variant.out)) {
   setTxtProgressBar(pb,i)
   positions<-as.numeric(gsub("P_","",colnames(variant.out)[grep("P_", colnames(variant.out))]))
   dummy<-consensus
-  dummy[positions]<-as.character(variant.out[i,grep("P_", colnames(variant.out))])  
-  if(length(grep("D",toupper(dummy)))>0){
+  dummy[positions]<-as.character(variant.out[i,grep("P_", colnames(variant.out))])
+  if(length(which(as.character(variant.out[i,grep("P_", colnames(variant.out))]) %in% c("D","I")))>0){
+    dummy[which(dummy %in% c("D","I"))]<-consensus[which(dummy %in% c("D","I"))]
   }
+
   if(length(which(dummy=="-"))>0)dummy<-dummy[-which(dummy=="-")]
   refspike[[1+i]]<-dummy[c(n.start:n.end)]
   names(refspike)[length(refspike)]<-paste("ID-",variant.out$variantID[i],sep = "")

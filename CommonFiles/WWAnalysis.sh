@@ -28,9 +28,27 @@ conda deactivate
 
 for dir in $(ls -d */)
 do
-    echo "Processing sample "${dir}
+    
+    numberoffiles=$(ls ${dir}*.fastq.gz | wc -l)
+    SKIP="FALSE"
+
+    if (( ${numberoffiles} == 1 ))
+    then
+    FILESIZE=$(stat -c%s ${dir}/*.fastq.gz)
+
+    if (( ${FILESIZE} < 1000000))
+    then
+    SKIP="TRUE"
+    echo "Skipping "${dir}
+    fi
+    fi
+
+    if [[ ${numberoffiles} > 1  || ${SKIP} == "FALSE" ]] 
+    then
+    echo "Processing "${numberoffiles}"fastq.gz files in"${dir}
+
     cd ${dir}
-	Reads=$(ls *.fastq.gz)
+	  Reads=$(ls *.fastq.gz)
     cat ${Reads} > ${dir%/}.fastq.gz
     gzip -d ${dir%/}.fastq.gz
     seqkit seq ${dir%/}.fastq -M 1300 -m 500 -Q ${1} > ${dir%/}.filtered.fastq
@@ -67,6 +85,7 @@ do
     rm Rplots.pdf
     rm spike.cons*
     cd ${basedir}  
+    fi
     #rm *.fasta
 done
 
