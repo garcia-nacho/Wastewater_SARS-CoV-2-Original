@@ -1,6 +1,8 @@
 # Wastewater SARS-CoV-2 Surveillance Pipeline
 [![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)   [![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)](https://https://docker.com/)
 
+:warning: This repository is no longer maintained here. For updates visit [FHI's github](https://github.com/folkehelseinstituttet/Wastewater_SARS-CoV-2)
+
 SARS-CoV-2 wastewater surveillance using long reads (Tested with Nanopore).
 
 ## Introduction
